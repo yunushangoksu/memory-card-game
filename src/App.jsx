@@ -1,42 +1,45 @@
-import "./reset.css";
-import "./App.css";
 import { useEffect, useState } from "react";
 import Card from "./components/card";
+import "./App.css";
 
 function App() {
-  const [pokeData, setPokeData] = useState([]);
+  const [pokemonFull, setPokemonFull] = useState([]);
 
-  const fetchPokeData = async () => {
-    await fetch("https://pokeapi.co/api/v2/pokemon?limit=10&offset=100")
-      .then((res) => res.json())
-      .then((data) => setPokeData(...pokeData, data.results))
-      .catch((error) => {
-        console.log("Bir hata oluştu : ", error);
+  const fetchPokemon = async () => {
+    const res = await fetch(
+      "https://pokeapi.co/api/v2/pokemon?limit=10&offset=300"
+    );
+    const data = await res.json();
+
+    function makeObject(pokeData) {
+      pokeData.forEach(async (poke) => {
+        const res = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${poke.name}`
+        );
+        const data = await res.json();
+        setPokemonFull((currentList) => [...currentList, data]);
       });
+    }
+    makeObject(data.results);
   };
 
   useEffect(() => {
-    fetchPokeData();
+    fetchPokemon();
   }, []);
 
   const checkLoaded = () => {
-    if (pokeData.length == 10) {
+    if (pokemonFull.length == 10) {
       return true;
     } else {
       return false;
     }
   };
 
-  console.log(checkLoaded());
-
   return (
-    <>
-      <div>Merhaba</div>
-
-      {checkLoaded() ? <Card data={pokeData} /> : <>Loading...</>}
-
-      <button onClick={() => console.log(pokeData)}>log</button>
-    </>
+    <div className="wrapper">
+      {checkLoaded() ? <Card pokemon={pokemonFull} /> : <>Loading...</>}
+      <button onClick={() => console.log(pokemonFull)}>Buton</button>
+    </div>
   );
 }
 

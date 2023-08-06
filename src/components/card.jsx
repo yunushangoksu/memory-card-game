@@ -1,12 +1,18 @@
-function Card({ data }) {
+function Card({ pokemon }) {
   return (
-    <div>
-      <img src="" alt="POKEMON" />
-      <div>
-        {data.map((pokeStats, index) => {
-          return <div key={index}>{pokeStats.name}</div>;
-        })}
-      </div>
+    <div className="cardWrapper">
+      {pokemon.map((res, index) => {
+        return (
+          <div key={index}>
+            <img
+              src={res.sprites.other["official-artwork"].front_default}
+              alt={res.name}
+              width={100}
+            />
+            <div>{res.name}</div>
+          </div>
+        );
+      })}
     </div>
   );
 }
