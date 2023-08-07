@@ -3,9 +3,12 @@ import Card from "./components/card";
 import "./App.css";
 
 function App() {
+  const [score, setScore] = useState(0);
   const [pokemonFull, setPokemonFull] = useState([]);
+  const [pokemonDummy, setPokmeonDummy] = useState([]);
 
   const fetchPokemon = async () => {
+    setPokemonFull([]);
     const res = await fetch(
       "https://pokeapi.co/api/v2/pokemon?limit=10&offset=300"
     );
@@ -29,16 +32,32 @@ function App() {
 
   const checkLoaded = () => {
     if (pokemonFull.length == 10) {
-      return true;
+      setPokmeonDummy(pokemonFull);
+      let sorted = pokemonDummy.sort(() => 0.5 - Math.random());
+      setPokemonFull([]);
+      setPokemonFull(sorted);
+      setPokmeonDummy([]);
     } else {
-      return false;
+      console.log("error");
     }
   };
 
   return (
     <div className="wrapper">
-      {checkLoaded() ? <Card pokemon={pokemonFull} /> : <>Loading...</>}
-      <button onClick={() => console.log(pokemonFull)}>Buton</button>
+      <div className="scoreRow">Score: {score}</div>
+      <div className="cardWrapper">
+        {pokemonFull.map((data, index) => (
+          <Card
+            pokemon={data}
+            pokemonSetter={setPokemonFull}
+            sort={checkLoaded}
+            score={score}
+            scoreSetter={setScore}
+            fetch={fetchPokemon}
+            key={index}
+          />
+        ))}
+      </div>
     </div>
   );
 }
