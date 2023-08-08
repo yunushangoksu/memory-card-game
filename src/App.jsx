@@ -48,7 +48,7 @@ function App() {
     <div className="wrapper">
       <div className="scoreRow">Score: {score}</div>
       <div className="cardWrapper">
-        {pokemonFull.map((data, index) => (
+        {pokemonFull.map((data) => (
           <Card
             pokemon={data}
             pokemonSetter={setPokemonFull}
@@ -56,7 +56,7 @@ function App() {
             score={score}
             scoreSetter={setScore}
             fetch={fetchPokemon}
-            key={index}
+            key={data.id}
           />
         ))}
       </div>
