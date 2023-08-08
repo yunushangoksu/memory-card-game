@@ -17,8 +17,8 @@ function Card({ pokemon, sort, fetch, score, scoreSetter }) {
       onClick={() => {
         if (isUsed == false) {
           setIsUsed(true);
+          sort();
           scoreSetter(score + 1);
-          console.log(isUsed);
         } else {
           resetGame();
         }

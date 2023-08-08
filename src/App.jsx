@@ -8,7 +8,6 @@ function App() {
   const [pokemonDummy, setPokmeonDummy] = useState([]);
 
   const fetchPokemon = async () => {
-    setPokemonFull([]);
     const res = await fetch(
       "https://pokeapi.co/api/v2/pokemon?limit=10&offset=300"
     );
@@ -23,6 +22,8 @@ function App() {
         setPokemonFull((currentList) => [...currentList, data]);
       });
     }
+    setPokemonFull([]);
+
     makeObject(data.results);
   };
 
@@ -30,24 +31,17 @@ function App() {
     fetchPokemon();
   }, []);
 
-  const checkLoaded = () => {
-    if (pokemonFull.length == 10) {
-      setPokmeonDummy(pokemonFull);
-      let sorted = pokemonDummy.sort(() => 0.5 - Math.random());
-      setPokemonFull([]);
-      setPokemonFull(sorted);
-      setPokmeonDummy([]);
-    } else {
-      console.log("error");
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
     }
-  };
+    return a;
+  }
 
-  const shuffle = () => {
-    setPokmeonDummy(pokemonFull);
-    let sorted = pokemonDummy.sort(() => 0.5 - Math.random());
+  const setShuffle = () => {
     setPokemonFull([]);
-    setPokemonFull(sorted);
-    setPokmeonDummy([]);
+    setPokemonFull(shuffle(pokemonFull));
   };
 
   return (
@@ -58,7 +52,7 @@ function App() {
           <Card
             pokemon={data}
             pokemonSetter={setPokemonFull}
-            sort={checkLoaded}
+            sort={setShuffle}
             score={score}
             scoreSetter={setScore}
             fetch={fetchPokemon}
@@ -66,6 +60,9 @@ function App() {
           />
         ))}
       </div>
+      {/*       <button onClick={() => console.log(pokemonFull)}>Log</button>
+      <button onClick={() => console.log(shuffle(pokemonFull))}>shuffle</button>
+ */}
     </div>
   );
 }
