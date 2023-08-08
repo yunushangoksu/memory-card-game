@@ -42,6 +42,14 @@ function App() {
     }
   };
 
+  const shuffle = () => {
+    setPokmeonDummy(pokemonFull);
+    let sorted = pokemonDummy.sort(() => 0.5 - Math.random());
+    setPokemonFull([]);
+    setPokemonFull(sorted);
+    setPokmeonDummy([]);
+  };
+
   return (
     <div className="wrapper">
       <div className="scoreRow">Score: {score}</div>
